@@ -15,6 +15,7 @@ import cn.bertsir.qrtest.databinding.ActivityMainBinding
 import cn.bertsir.zbar.QrConfig
 import cn.bertsir.zbar.QrManager
 import cn.bertsir.zbar.utils.QRUtils
+import cn.bertsir.zbar.utils.SizeUtil
 import cn.bertsir.zbar.view.ScanLineView
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -131,6 +132,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             .setScanLineStyle(lineStyle) //扫描线样式
             .setAutoLight(binding.cbAutoLight.isChecked) //自动灯光
             .setShowVibrator(binding.cbHaveVibrator.isChecked) //是否震动提醒
+            .setScannerSize(SizeUtil.dip2px(this,300),SizeUtil.dip2px(this,300))
             .create()
         QrManager.getInstance().init(qrConfig).startScan(this@MainActivity) { result ->
             Log.e(TAG, "onScanSuccess: $result")

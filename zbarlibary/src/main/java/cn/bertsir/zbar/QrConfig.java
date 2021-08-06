@@ -20,11 +20,11 @@ public class QrConfig implements Serializable {
     public static final int LINE_SLOW = 3000;
 
 
-    public  int CORNER_COLOR = Color.parseColor("#ff5f00");
-    public  int LINE_COLOR = Color.parseColor("#ff5f00");
+    public int CORNER_COLOR = Color.parseColor("#ff5f00");
+    public int LINE_COLOR = Color.parseColor("#ff5f00");
 
-    public  int TITLE_BACKGROUND_COLOR = Color.parseColor("#ff5f00");
-    public  int TITLE_TEXT_COLOR = Color.parseColor("#ffffff");
+    public int TITLE_BACKGROUND_COLOR = Color.parseColor("#ff5f00");
+    public int TITLE_TEXT_COLOR = Color.parseColor("#ffffff");
 
     public boolean showTitle = true;
     public boolean showLight = true;
@@ -51,18 +51,22 @@ public class QrConfig implements Serializable {
     public int flashImgRes = R.drawable.scanner_light;
     public int albumImgRes = R.drawable.scanner_album;
 
+    public static final int DEFAULT_SCANNER_WIDTH = -1;
+    public static final int DEFAULT_SCANNER_HEIGHT = -1;
 
+    public int scannerWidth = DEFAULT_SCANNER_WIDTH;
+    public int scannerHeight = DEFAULT_SCANNER_WIDTH;
 
     public boolean autoLight = false;
 
 
-    public static  int dingPath = R.raw.qrcode;//默认声音
+    public static int dingPath = R.raw.qrcode;//默认声音
     public int customBarCodeFormat = -1;
 
     public static final int TYPE_QRCODE = 1;//扫描二维码
-    public  static final int TYPE_BARCODE = 2;//扫描条形码（UPCA）
-    public  static final int TYPE_ALL = 3;//扫描全部类型码
-    public  static final int TYPE_CUSTOM = 4;//扫描用户定义类型码
+    public static final int TYPE_BARCODE = 2;//扫描条形码（UPCA）
+    public static final int TYPE_ALL = 3;//扫描全部类型码
+    public static final int TYPE_CUSTOM = 4;//扫描用户定义类型码
 
     public static final int SCANVIEW_TYPE_QRCODE = 1;//二维码框
     public static final int SCANVIEW_TYPE_BARCODE = 2;//条形码框
@@ -76,7 +80,7 @@ public class QrConfig implements Serializable {
     public final static int REQUEST_CAMERA = 99;
     public final static String EXTRA_THIS_CONFIG = "extra_this_config";
 
-    public  int SCREEN_ORIENTATION = SCREEN_PORTRAIT;
+    public int SCREEN_ORIENTATION = SCREEN_PORTRAIT;
 
     /**
      * EAN-8.
@@ -137,6 +141,14 @@ public class QrConfig implements Serializable {
     public static final int BARCODE_CODE128 = 128;
 
 
+    public int getScannerWidth() {
+        return scannerWidth;
+    }
+
+    public int getScannerHeight() {
+        return scannerHeight;
+    }
+
     public int getScanType() {
         return scanType;
     }
@@ -177,7 +189,7 @@ public class QrConfig implements Serializable {
         return showDesc;
     }
 
-    public boolean isNeedCrop(){
+    public boolean isNeedCrop() {
         return needCrop;
     }
 
@@ -258,18 +270,40 @@ public class QrConfig implements Serializable {
         return showVibrator;
     }
 
-    public int getBackImgRes(){ return backImgRes; }
+    public int getBackImgRes() {
+        return backImgRes;
+    }
 
-    public int getLightImageRes(){return flashImgRes;}
+    public int getLightImageRes() {
+        return flashImgRes;
+    }
 
-    public int getAlbumImageRes(){ return albumImgRes;}
+    public int getAlbumImageRes() {
+        return albumImgRes;
+    }
 
 
-    public static class Builder{
+    public static class Builder {
         private QrConfig watcher;
 
-        public Builder(){
+        public Builder() {
             watcher = new QrConfig();
+        }
+
+        public Builder setScannerWidth(int width) {
+            watcher.scannerWidth = width;
+            return this;
+        }
+
+        public Builder setScannerHeight(int height) {
+            watcher.scannerHeight = height;
+            return this;
+        }
+
+        public Builder setScannerSize(int width, int height) {
+            watcher.scannerWidth = width;
+            watcher.scannerHeight = height;
+            return this;
         }
 
         public Builder setLineSpeed(int speed) {
@@ -277,105 +311,107 @@ public class QrConfig implements Serializable {
             return this;
         }
 
-        public Builder setLineColor(int color){
+        public Builder setLineColor(int color) {
             watcher.LINE_COLOR = color;
             return this;
         }
 
-        public Builder setCornerColor(int color){
+        public Builder setCornerColor(int color) {
             watcher.CORNER_COLOR = color;
             return this;
         }
 
-        public Builder setCornerWidth(int dp){
+        public Builder setCornerWidth(int dp) {
             watcher.cornerWidth = dp;
             return this;
         }
 
-        public Builder setDesText(String text){
+        public Builder setDesText(String text) {
             watcher.descText = text;
             return this;
         }
 
-        public Builder setTitleText(String text){
+        public Builder setTitleText(String text) {
             watcher.titleText = text;
             return this;
         }
 
-        public Builder setShowTitle(boolean show){
+        public Builder setShowTitle(boolean show) {
             watcher.showTitle = show;
             return this;
         }
-        public Builder setShowLight(boolean show){
+
+        public Builder setShowLight(boolean show) {
             watcher.showLight = show;
             return this;
         }
-        public Builder setShowAlbum(boolean show){
+
+        public Builder setShowAlbum(boolean show) {
             watcher.showAlbum = show;
             return this;
         }
 
-        public Builder setShowDes(boolean show){
+        public Builder setShowDes(boolean show) {
             watcher.showDesc = show;
             return this;
         }
 
-        public Builder setNeedCrop(boolean crop){
+        public Builder setNeedCrop(boolean crop) {
             watcher.needCrop = crop;
             return this;
         }
 
-        public Builder setTitleBackgroudColor(int color){
+        public Builder setTitleBackgroudColor(int color) {
             watcher.TITLE_BACKGROUND_COLOR = color;
             return this;
         }
 
-        public Builder setTitleTextColor(int color){
+        public Builder setTitleTextColor(int color) {
             watcher.TITLE_TEXT_COLOR = color;
             return this;
         }
 
-        public Builder setScanType(int type){
+        public Builder setScanType(int type) {
             watcher.scanType = type;
             return this;
         }
 
-        public Builder setPlaySound(boolean play){
+        public Builder setPlaySound(boolean play) {
             watcher.playSound = play;
             return this;
         }
 
-        public Builder setCustomBarCodeFormat(int format){
+        public Builder setCustomBarCodeFormat(int format) {
             watcher.customBarCodeFormat = format;
             return this;
         }
 
-        public Builder setScanViewType(int type){
+        public Builder setScanViewType(int type) {
             watcher.scanViewType = type;
             return this;
         }
 
-        public Builder setIsOnlyCenter(boolean isOnlyCenter){
+        public Builder setIsOnlyCenter(boolean isOnlyCenter) {
             watcher.onlyCenter = isOnlyCenter;
             return this;
         }
 
-        public Builder setDingPath(int ding){
+        public Builder setDingPath(int ding) {
             watcher.dingPath = ding;
             return this;
         }
 
-        public Builder setShowZoom(boolean zoom){
+        public Builder setShowZoom(boolean zoom) {
             watcher.showZoom = zoom;
             return this;
         }
 
-        public Builder setAutoZoom(boolean auto){
+        public Builder setAutoZoom(boolean auto) {
             watcher.autoZoom = auto;
             return this;
         }
 
-        public Builder setFingerZoom(boolean auto){
+        public Builder setFingerZoom(boolean auto) {
             watcher.fingerZoom = auto;
             return this;
         }
@@ -396,47 +432,47 @@ public class QrConfig implements Serializable {
             return this;
         }
 
-        public Builder setLooperScan(boolean looper){
+        public Builder setLooperScan(boolean looper) {
             watcher.loopScan = looper;
             return this;
         }
 
-        public Builder setLooperWaitTime(int time){
+        public Builder setLooperWaitTime(int time) {
             watcher.loopWaitTime = time;
             return this;
         }
 
-        public Builder setScanLineStyle(int style){
+        public Builder setScanLineStyle(int style) {
             watcher.lineStyle = style;
             return this;
         }
 
-        public Builder setAutoLight(boolean light){
+        public Builder setAutoLight(boolean light) {
             watcher.autoLight = light;
             return this;
         }
 
-        public Builder setShowVibrator(boolean vibrator){
+        public Builder setShowVibrator(boolean vibrator) {
             watcher.showVibrator = vibrator;
             return this;
         }
 
-        public Builder setBackImageRes(@DrawableRes int res){
+        public Builder setBackImageRes(@DrawableRes int res) {
             watcher.backImgRes = res;
             return this;
         }
 
-        public Builder setLightImageRes(@DrawableRes int res){
+        public Builder setLightImageRes(@DrawableRes int res) {
             watcher.flashImgRes = res;
             return this;
         }
 
-        public Builder setAlbumImageRes(@DrawableRes int res){
+        public Builder setAlbumImageRes(@DrawableRes int res) {
             watcher.albumImgRes = res;
             return this;
         }
 
-        public QrConfig create(){
+        public QrConfig create() {
             return watcher;
         }
     }

@@ -23,11 +23,13 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import cn.bertsir.zbar.Qr.Config
 import cn.bertsir.zbar.Qr.ScanResult
 import cn.bertsir.zbar.Qr.Symbol
 import cn.bertsir.zbar.databinding.ActivityQrBinding
 import cn.bertsir.zbar.utils.GetPathFromUri
 import cn.bertsir.zbar.utils.QRUtils
+import cn.bertsir.zbar.utils.SizeUtil
 import com.soundcloud.android.crop.Crop
 import java.io.File
 
@@ -77,7 +79,7 @@ class QRActivity : AppCompatActivity(), SensorEventListener {
      * 初始化参数
      */
     private fun initParameters() {
-        requestedOrientation = when (options.getScreenOrientation()) {
+        requestedOrientation = when (options.screenOrientation) {
             QrConfig.SCREEN_LANDSCAPE -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             QrConfig.SCREEN_PORTRAIT -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             QrConfig.SCREEN_SENSOR -> ActivityInfo.SCREEN_ORIENTATION_SENSOR
@@ -102,11 +104,22 @@ class QRActivity : AppCompatActivity(), SensorEventListener {
      */
     private fun initView() {
         //bi~
+        if (options.scannerWidth == QrConfig.DEFAULT_SCANNER_WIDTH) {
+            val defaultSize = SizeUtil.dip2px(this, 300)
+            binding.scanView.setScannerWidth(defaultSize)
+        }else{
+            binding.scanView.setScannerWidth(options.scannerWidth)
+        }
+        if (options.scannerHeight == QrConfig.DEFAULT_SCANNER_HEIGHT) {
+            val defaultSize = SizeUtil.dip2px(this, 300)
+            binding.scanView.setScannerHeight(defaultSize)
+        }else{
+            binding.scanView.setScannerHeight(options.scannerWidth)
+        }
+
         soundPool = SoundPool(10, AudioManager.STREAM_SYSTEM, 5)
         soundPool.load(this, QrConfig.getDingPath(), 1)
         binding.scanView.setType(options.getScanViewType())
-
-
         binding.flash.setImageResource(options.lightImageRes)
         binding.album.setImageResource(options.albumImageRes)
         binding.album.setOnClickListener { fromAlbum() }
@@ -118,11 +131,11 @@ class QRActivity : AppCompatActivity(), SensorEventListener {
         binding.desc.visibility = if (options.isShowDesc) View.VISIBLE else View.GONE
         binding.zoom.visibility = if (options.isShowZoom) View.VISIBLE else View.GONE
         binding.desc.text = options.getDescText()
-        binding.scanView.setCornerColor(options.getCornerColor())
+        binding.scanView.setCornerColor(options.cornerColor)
         binding.scanView.setLineSpeed(options.getLineSpeed())
-        binding.scanView.setLineColor(options.getLineColor())
+        binding.scanView.setLineColor(options.lineColor)
         binding.scanView.setScanLineStyle(options.getLineStyle())
-        setSeekBarColor(binding.zoom, options.getCornerColor())
+        setSeekBarColor(binding.zoom, options.cornerColor)
         binding.zoom.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 binding.cameraPreview.setZoom(progress / 100f)

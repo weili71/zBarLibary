@@ -29,17 +29,17 @@ public class ScanView extends FrameLayout {
         initView(context);
     }
 
-    public ScanView(Context context,AttributeSet attrs) {
+    public ScanView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initView(context);
     }
 
-    public ScanView(Context context,AttributeSet attrs,int defStyleAttr) {
+    public ScanView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView(context);
     }
 
-    private void initView(Context context){
+    private void initView(Context context) {
         binding = ViewScanBinding.inflate(LayoutInflater.from(context), this, true);
 
         cornerViews = new ArrayList<>();
@@ -54,9 +54,10 @@ public class ScanView extends FrameLayout {
 
     /**
      * 设置扫描速度
+     *
      * @param speed
      */
-    public void setLineSpeed(int speed){
+    public void setLineSpeed(int speed) {
         binding.scanLine.setScanAnimatorDuration(speed);
     }
 
@@ -64,46 +65,51 @@ public class ScanView extends FrameLayout {
     /**
      * 设置扫描样式
      */
-    public void setScanLineStyle(int style){
+    public void setScanLineStyle(int style) {
         binding.scanLine.setScanStyle(style);
     }
 
-
-    public void setType(int type){
-        CURRENT_TYPE = type;
-        LinearLayout.LayoutParams fl_params = (LinearLayout.LayoutParams) binding.scan.getLayoutParams();
-        if(CURRENT_TYPE == QrConfig.SCANVIEW_TYPE_QRCODE){
-            fl_params.width = dip2px(300);
-            fl_params.height = dip2px(300);
-        }else if(CURRENT_TYPE == QrConfig.SCANVIEW_TYPE_BARCODE){
-            fl_params.width = dip2px(300);
-            fl_params.height = dip2px(100);
-        }
-        binding.scan.setLayoutParams(fl_params);
+    public void setScannerWidth(int width) {
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) binding.scan.getLayoutParams();
+        params.width = width;
+        binding.scan.setLayoutParams(params);
     }
 
-    public void setCornerColor(int color){
+    public void setScannerHeight(int height) {
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) binding.scan.getLayoutParams();
+        params.height = height;
+        binding.scan.setLayoutParams(params);
+    }
+
+    public void setScannerSize(int width, int height) {
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) binding.scan.getLayoutParams();
+        params.width = width;
+        params.height = height;
+        binding.scan.setLayoutParams(params);
+    }
+
+    public void setType(int type) {
+        CURRENT_TYPE = type;
+
+    }
+
+    public void setCornerColor(int color) {
         for (int i = 0; i < cornerViews.size(); i++) {
             cornerViews.get(i).setColor(color);
         }
     }
 
-    public void setCornerWidth(int dp){
+    public void setCornerWidth(int dp) {
         for (int i = 0; i < cornerViews.size(); i++) {
             cornerViews.get(i).setLineWidth(dp);
         }
     }
 
-    public void setLineColor(int color){
+    public void setLineColor(int color) {
         binding.scanLine.setScancolor(color);
     }
 
-    public int dip2px(int dp) {
-        float density = getContext().getResources().getDisplayMetrics().density;
-        return (int) (dp * density + 0.5);
-    }
-
-    public void getViewWidthHeight(){
+    public void getViewWidthHeight() {
         binding.scan.post(new Runnable() {
             @Override
             public void run() {
@@ -112,7 +118,6 @@ public class ScanView extends FrameLayout {
             }
         });
     }
-
 
 
 }
