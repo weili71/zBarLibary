@@ -5,7 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.SeekBar;
+import androidx.appcompat.widget.AppCompatSeekBar;
 
 import cn.bertsir.zbar.R;
 
@@ -13,13 +13,13 @@ import cn.bertsir.zbar.R;
  * Created by Bert on 2019/3/1.
  * Mail: bertsir@163.com
  */
-public class VerticalSeekBar extends SeekBar {
+public class VerticalSeekBar extends AppCompatSeekBar {
     private static final String TAG = VerticalSeekBar.class.getSimpleName();
 
     public static final int ROTATION_ANGLE_CW_90 = 90;
     public static final int ROTATION_ANGLE_CW_270 = 270;
 
-    private int mRotationAngle = ROTATION_ANGLE_CW_90;
+    private int rotationAngle = ROTATION_ANGLE_CW_90;
 
     public VerticalSeekBar(Context context) {
         super(context);//注意是super 而不是调用其他构造函数
@@ -42,7 +42,7 @@ public class VerticalSeekBar extends SeekBar {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.VerticalSeekBar, defStyleAttr, defStyleRes);
             final int rotationAngle = a.getInteger(R.styleable.VerticalSeekBar_seekBarRotation, 0);
             if (isValidRotationAngle(rotationAngle)) {
-                mRotationAngle = rotationAngle;
+                this.rotationAngle = rotationAngle;
             }
             a.recycle();
         }
@@ -59,11 +59,11 @@ public class VerticalSeekBar extends SeekBar {
     }
 
     protected void onDraw(Canvas c) {
-        if (mRotationAngle == ROTATION_ANGLE_CW_270) {
+        if (rotationAngle == ROTATION_ANGLE_CW_270) {
             //从下到上
             c.rotate(270);
             c.translate(-getHeight(), 0);
-        } else if (mRotationAngle == ROTATION_ANGLE_CW_90) {
+        } else if (rotationAngle == ROTATION_ANGLE_CW_90) {
             //从上到下
             c.rotate(90);
             c.translate(0, -getWidth());
@@ -82,10 +82,10 @@ public class VerticalSeekBar extends SeekBar {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
             case MotionEvent.ACTION_UP:
-                if (mRotationAngle == ROTATION_ANGLE_CW_270) {
+                if (rotationAngle == ROTATION_ANGLE_CW_270) {
                     //从下到上
                     setProgress(getMax() - (int) (getMax() * event.getY() / getHeight()));
-                } else if (mRotationAngle == ROTATION_ANGLE_CW_90) {
+                } else if (rotationAngle == ROTATION_ANGLE_CW_90) {
                     //从上到下
                     setProgress((int) (getMax() * event.getY() / getHeight()));
                 }

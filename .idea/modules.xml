@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/zBarLibary.iml" filepath="$PROJECT_DIR$/zBarLibary.iml" />
-      <module fileurl="file://$PROJECT_DIR$/zbarlibary/zbarlibary.iml" filepath="$PROJECT_DIR$/zbarlibary/zbarlibary.iml" />
-      <module fileurl="file://$PROJECT_DIR$/zl.iml" filepath="$PROJECT_DIR$/zl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/zBarLibary.iml" filepath="$PROJECT_DIR$/.idea/modules/zBarLibary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/zBarLibary.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/zBarLibary.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/zbarlibary/zBarLibary.zbarlibary.iml" filepath="$PROJECT_DIR$/.idea/modules/zbarlibary/zBarLibary.zbarlibary.iml" />
     </modules>
   </component>
 </project>

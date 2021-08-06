@@ -27,37 +27,37 @@ public class ScanLineView extends View {
 
     private static final String TAG = "ScanView";
 
-    public static final int style_gridding = 0;//扫描区域的样式
-    public static final int style_radar = 1;
-    public static final int style_hybrid = 2;
-    public static final int style_line = 3;
+    public static final int styleGrid = 0;//扫描区域的样式
+    public static final int styleRadar = 1;
+    public static final int styleHybrid = 2;
+    public static final int styleLine = 3;
 
 
-    private Rect mFrame;//最佳扫描区域的Rect
+    private Rect frame;//最佳扫描区域的Rect
 
-    private Paint mScanPaint_Gridding;//网格样式画笔
-    private Paint mScanPaint_Radio;//雷达样式画笔
-    private Paint mScanPaint_Line;//线条样式画笔
+    private Paint scanPaintGrid;//网格样式画笔
+    private Paint scanPaintRadio;//雷达样式画笔
+    private Paint scanPaintLine;//线条样式画笔
 
-    private Path mBoundaryLinePath;//边框path
-    private Path mGriddingPath;//网格样式的path
+    private Path boundaryLinePath;//边框path
+    private Path gridPath;//网格样式的path
 
-    private LinearGradient mLinearGradient_Radar;//雷达样式的画笔shader
-    private LinearGradient mLinearGradient_Gridding;//网格画笔的shader
-    private LinearGradient mLinearGradient_line;
-    private float mGriddingLineWidth = 2;//网格线的线宽，单位pix
-    private int mGriddingDensity = 40;//网格样式的，网格密度，值越大越密集
+    private LinearGradient linearGradientRadar;//雷达样式的画笔shader
+    private LinearGradient linearGradientGrid;//网格画笔的shader
+    private LinearGradient linearGradientLine;
+    private float gridLineWidth = 2;//网格线的线宽，单位pix
+    private int gridDensity = 40;//网格样式的，网格密度，值越大越密集
 
 
-    private float mCornerLineLen = 50f;//根据比例计算的边框长度，从四角定点向临近的定点画出的长度
+    private float cornerLineLen = 50f;//根据比例计算的边框长度，从四角定点向临近的定点画出的长度
 
-    private Matrix mScanMatrix;//变换矩阵，用来实现动画效果
-    private ValueAnimator mValueAnimator;//值动画，用来变换矩阵操作
+    private Matrix scanMatrix;//变换矩阵，用来实现动画效果
+    private ValueAnimator valueAnimator;//值动画，用来变换矩阵操作
 
-    private int mScanAnimatorDuration = 1800;//值动画的时长
-    private int mScancolor;//扫描颜色
+    private int scanAnimatorDuration = 1800;//值动画的时长
+    private int scanColor;//扫描颜色
 
-    private int mScanStyle = style_gridding;//网格 0：网格，1：纵向雷达 2:综合 3:线
+    private int scanStyle = styleGrid;//网格 0：网格，1：纵向雷达 2:综合 3:线
     private float animatedValue;
 
 
@@ -78,24 +78,24 @@ public class ScanLineView extends View {
 
     private void init() {
         // Initialize these once for performance rather than calling them every time in onDraw().
-        mScanPaint_Gridding = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mScanPaint_Gridding.setStyle(Paint.Style.STROKE);
-        mScanPaint_Gridding.setStrokeWidth(mGriddingLineWidth);
+        scanPaintGrid = new Paint(Paint.ANTI_ALIAS_FLAG);
+        scanPaintGrid.setStyle(Paint.Style.STROKE);
+        scanPaintGrid.setStrokeWidth(gridLineWidth);
 
-        mScanPaint_Radio = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mScanPaint_Radio.setStyle(Paint.Style.FILL);
+        scanPaintRadio = new Paint(Paint.ANTI_ALIAS_FLAG);
+        scanPaintRadio.setStyle(Paint.Style.FILL);
         Resources resources = getResources();
-        mScancolor = resources.getColor(R.color.common_color);
+        scanColor = resources.getColor(R.color.common_color);
 
 
-        mScanPaint_Line=new Paint();//创建一个画笔
-        mScanPaint_Line.setStyle(Paint.Style.FILL);//设置非填充
-        mScanPaint_Line.setStrokeWidth(10);//笔宽5像素
-        mScanPaint_Line.setAntiAlias(true);//锯齿不显示
+        scanPaintLine =new Paint();//创建一个画笔
+        scanPaintLine.setStyle(Paint.Style.FILL);//设置非填充
+        scanPaintLine.setStrokeWidth(10);//笔宽5像素
+        scanPaintLine.setAntiAlias(true);//锯齿不显示
 
         //变换矩阵，用来处理扫描的上下扫描效果
-        mScanMatrix = new Matrix();
-        mScanMatrix.setTranslate(0, 30);
+        scanMatrix = new Matrix();
+        scanMatrix.setTranslate(0, 30);
     }
 
     @Override
@@ -106,59 +106,59 @@ public class ScanLineView extends View {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        mFrame = new Rect(left,top,right,bottom);
+        frame = new Rect(left,top,right,bottom);
 
         initBoundaryAndAnimator();
     }
 
     private void initBoundaryAndAnimator() {
-        if (mBoundaryLinePath == null) {
-            mBoundaryLinePath = new Path();
-            mBoundaryLinePath.moveTo(mFrame.left, mFrame.top + mCornerLineLen);
-            mBoundaryLinePath.lineTo(mFrame.left, mFrame.top);
-            mBoundaryLinePath.lineTo(mFrame.left + mCornerLineLen, mFrame.top);
-            mBoundaryLinePath.moveTo(mFrame.right - mCornerLineLen, mFrame.top);
-            mBoundaryLinePath.lineTo(mFrame.right, mFrame.top);
-            mBoundaryLinePath.lineTo(mFrame.right, mFrame.top + mCornerLineLen);
-            mBoundaryLinePath.moveTo(mFrame.right, mFrame.bottom - mCornerLineLen);
-            mBoundaryLinePath.lineTo(mFrame.right, mFrame.bottom);
-            mBoundaryLinePath.lineTo(mFrame.right - mCornerLineLen, mFrame.bottom);
-            mBoundaryLinePath.moveTo(mFrame.left + mCornerLineLen, mFrame.bottom);
-            mBoundaryLinePath.lineTo(mFrame.left, mFrame.bottom);
-            mBoundaryLinePath.lineTo(mFrame.left, mFrame.bottom - mCornerLineLen);
+        if (boundaryLinePath == null) {
+            boundaryLinePath = new Path();
+            boundaryLinePath.moveTo(frame.left, frame.top + cornerLineLen);
+            boundaryLinePath.lineTo(frame.left, frame.top);
+            boundaryLinePath.lineTo(frame.left + cornerLineLen, frame.top);
+            boundaryLinePath.moveTo(frame.right - cornerLineLen, frame.top);
+            boundaryLinePath.lineTo(frame.right, frame.top);
+            boundaryLinePath.lineTo(frame.right, frame.top + cornerLineLen);
+            boundaryLinePath.moveTo(frame.right, frame.bottom - cornerLineLen);
+            boundaryLinePath.lineTo(frame.right, frame.bottom);
+            boundaryLinePath.lineTo(frame.right - cornerLineLen, frame.bottom);
+            boundaryLinePath.moveTo(frame.left + cornerLineLen, frame.bottom);
+            boundaryLinePath.lineTo(frame.left, frame.bottom);
+            boundaryLinePath.lineTo(frame.left, frame.bottom - cornerLineLen);
         }
 
-        if (mValueAnimator == null) {
-            initScanValueAnim(mFrame.height());
+        if (valueAnimator == null) {
+            initScanValueAnim(frame.height());
         }
     }
 
     @SuppressLint("DrawAllocation")
     @Override
     public void onDraw(Canvas canvas) {
-        if (mFrame == null||mBoundaryLinePath==null) {
+        if (frame == null|| boundaryLinePath ==null) {
             return;
         }
-        switch (mScanStyle) {
-            case style_gridding:
+        switch (scanStyle) {
+            case styleGrid:
                 initGriddingPathAndStyle();
-                canvas.drawPath(mGriddingPath, mScanPaint_Gridding);
+                canvas.drawPath(gridPath, scanPaintGrid);
                 break;
-            case style_radar:
+            case styleRadar:
                 initRadarStyle();
-                canvas.drawRect(mFrame, mScanPaint_Radio);
+                canvas.drawRect(frame, scanPaintRadio);
                 break;
-            case style_line:
+            case styleLine:
                 initLineStyle();
-                canvas.drawLine(0,(mFrame.height()- Math.abs(animatedValue)),getMeasuredWidth(),
-                        (mFrame.height()- Math.abs(animatedValue)), mScanPaint_Line);
+                canvas.drawLine(0,(frame.height()- Math.abs(animatedValue)),getMeasuredWidth(),
+                        (frame.height()- Math.abs(animatedValue)), scanPaintLine);
                 break;
-            case style_hybrid:
+            case styleHybrid:
             default:
                 initGriddingPathAndStyle();
                 initRadarStyle();
-                canvas.drawPath(mGriddingPath, mScanPaint_Gridding);
-                canvas.drawRect(mFrame, mScanPaint_Radio);
+                canvas.drawPath(gridPath, scanPaintGrid);
+                canvas.drawRect(frame, scanPaintRadio);
                 break;
 
         }
@@ -166,100 +166,100 @@ public class ScanLineView extends View {
     }
 
     private void initRadarStyle() {
-        if (mLinearGradient_Radar == null) {
-            mLinearGradient_Radar = new LinearGradient(0, mFrame.top, 0, mFrame.bottom + 0.01f * mFrame.height(),
-                    new int[]{Color.TRANSPARENT, Color.TRANSPARENT, mScancolor, Color.TRANSPARENT}, new float[]{0, 0.85f, 0.99f, 1f}, LinearGradient.TileMode.CLAMP);
-            mLinearGradient_Radar.setLocalMatrix(mScanMatrix);
-            mScanPaint_Radio.setShader(mLinearGradient_Radar);
+        if (linearGradientRadar == null) {
+            linearGradientRadar = new LinearGradient(0, frame.top, 0, frame.bottom + 0.01f * frame.height(),
+                    new int[]{Color.TRANSPARENT, Color.TRANSPARENT, scanColor, Color.TRANSPARENT}, new float[]{0, 0.85f, 0.99f, 1f}, LinearGradient.TileMode.CLAMP);
+            linearGradientRadar.setLocalMatrix(scanMatrix);
+            scanPaintRadio.setShader(linearGradientRadar);
         }
     }
 
     private void initLineStyle() {
-        if (mLinearGradient_line == null) {
-            String line_colors = String.valueOf(Integer.toHexString(mScancolor));
+        if (linearGradientLine == null) {
+            String line_colors = String.valueOf(Integer.toHexString(scanColor));
             line_colors = line_colors.substring(line_colors.length() - 6, line_colors.length() - 0);
-            mLinearGradient_line = new LinearGradient(0,0,getMeasuredWidth(),0,new int[] {Color.parseColor("#00"+line_colors),
-                    mScancolor, Color.parseColor("#00"+line_colors),},null, Shader.TileMode.CLAMP);
-            mLinearGradient_line.setLocalMatrix(mScanMatrix);
-            mScanPaint_Line.setShader(mLinearGradient_line);
+            linearGradientLine = new LinearGradient(0,0,getMeasuredWidth(),0,new int[] {Color.parseColor("#00"+line_colors),
+                    scanColor, Color.parseColor("#00"+line_colors),},null, Shader.TileMode.CLAMP);
+            linearGradientLine.setLocalMatrix(scanMatrix);
+            scanPaintLine.setShader(linearGradientLine);
         }
     }
 
     private void initGriddingPathAndStyle() {
-        if (mGriddingPath == null) {
-            mGriddingPath = new Path();
-            float wUnit = mFrame.width() / (mGriddingDensity + 0f);
-            float hUnit = mFrame.height() / (mGriddingDensity + 0f);
-            for (int i = 0; i <= mGriddingDensity; i++) {
-                mGriddingPath.moveTo(mFrame.left + i * wUnit, mFrame.top);
-                mGriddingPath.lineTo(mFrame.left + i * wUnit, mFrame.bottom);
+        if (gridPath == null) {
+            gridPath = new Path();
+            float wUnit = frame.width() / (gridDensity + 0f);
+            float hUnit = frame.height() / (gridDensity + 0f);
+            for (int i = 0; i <= gridDensity; i++) {
+                gridPath.moveTo(frame.left + i * wUnit, frame.top);
+                gridPath.lineTo(frame.left + i * wUnit, frame.bottom);
             }
-            for (int i = 0; i <= mGriddingDensity; i++) {
-                mGriddingPath.moveTo(mFrame.left, mFrame.top + i * hUnit);
-                mGriddingPath.lineTo(mFrame.right, mFrame.top + i * hUnit);
+            for (int i = 0; i <= gridDensity; i++) {
+                gridPath.moveTo(frame.left, frame.top + i * hUnit);
+                gridPath.lineTo(frame.right, frame.top + i * hUnit);
             }
         }
-        if (mLinearGradient_Gridding == null) {
-            mLinearGradient_Gridding = new LinearGradient(0, mFrame.top, 0, mFrame.bottom + 0.01f * mFrame.height(), new int[]{Color.TRANSPARENT, Color.TRANSPARENT, mScancolor, Color.TRANSPARENT}, new float[]{0, 0.5f, 0.99f, 1f}, LinearGradient.TileMode.CLAMP);
-            mLinearGradient_Gridding.setLocalMatrix(mScanMatrix);
-            mScanPaint_Gridding.setShader(mLinearGradient_Gridding);
+        if (linearGradientGrid == null) {
+            linearGradientGrid = new LinearGradient(0, frame.top, 0, frame.bottom + 0.01f * frame.height(), new int[]{Color.TRANSPARENT, Color.TRANSPARENT, scanColor, Color.TRANSPARENT}, new float[]{0, 0.5f, 0.99f, 1f}, LinearGradient.TileMode.CLAMP);
+            linearGradientGrid.setLocalMatrix(scanMatrix);
+            scanPaintGrid.setShader(linearGradientGrid);
 
         }
     }
 
     public void initScanValueAnim(int height) {
-        mValueAnimator = new ValueAnimator();
-        mValueAnimator.setDuration(mScanAnimatorDuration);
-        mValueAnimator.setFloatValues(-height, 0);
-        mValueAnimator.setRepeatMode(ValueAnimator.RESTART);
-        mValueAnimator.setInterpolator(new DecelerateInterpolator());
-        mValueAnimator.setRepeatCount(Animation.INFINITE);
-        mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        valueAnimator = new ValueAnimator();
+        valueAnimator.setDuration(scanAnimatorDuration);
+        valueAnimator.setFloatValues(-height, 0);
+        valueAnimator.setRepeatMode(ValueAnimator.RESTART);
+        valueAnimator.setInterpolator(new DecelerateInterpolator());
+        valueAnimator.setRepeatCount(Animation.INFINITE);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
 
 
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                if(mLinearGradient_Gridding == null){
+                if(linearGradientGrid == null){
                     initGriddingPathAndStyle();
                 }
-                if(mLinearGradient_Radar == null){
+                if(linearGradientRadar == null){
                     initRadarStyle();
                 }
 
-                if(mLinearGradient_line == null){
+                if(linearGradientLine == null){
                     initLineStyle();
                 }
 
-                if (mScanMatrix != null ) {
+                if (scanMatrix != null ) {
                     animatedValue = (float) animation.getAnimatedValue();
-                    mScanMatrix.setTranslate(0, animatedValue);
-                    mLinearGradient_Gridding.setLocalMatrix(mScanMatrix);
-                    mLinearGradient_Radar.setLocalMatrix(mScanMatrix);
-                    mLinearGradient_line.setLocalMatrix(mScanMatrix);
+                    scanMatrix.setTranslate(0, animatedValue);
+                    linearGradientGrid.setLocalMatrix(scanMatrix);
+                    linearGradientRadar.setLocalMatrix(scanMatrix);
+                    linearGradientLine.setLocalMatrix(scanMatrix);
                     //mScanPaint.setShader(mLinearGradient); //不是必须的设置到shader即可
                     invalidate();
                 }
             }
         });
-        mValueAnimator.start();
+        valueAnimator.start();
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        if (mValueAnimator != null && mValueAnimator.isRunning()) {
-            mValueAnimator.cancel();
+        if (valueAnimator != null && valueAnimator.isRunning()) {
+            valueAnimator.cancel();
         }
         super.onDetachedFromWindow();
     }
 
     //设定扫描的颜色
     public void setScancolor(int colorValue) {
-        this.mScancolor = colorValue;
+        this.scanColor = colorValue;
     }
 
     public void setScanAnimatorDuration(int duration) {
-        this.mScanAnimatorDuration = duration;
+        this.scanAnimatorDuration = duration;
     }
 
 
@@ -269,7 +269,7 @@ public class ScanLineView extends View {
      *
      * */
     public void setScanStyle(int scanStyle) {
-        this.mScanStyle = scanStyle;
+        this.scanStyle = scanStyle;
     }
 
     /*
@@ -278,8 +278,8 @@ public class ScanLineView extends View {
      * @params density：网格的密度
      * */
     public void setScanGriddingStyle(float strokeWidh, int density) {
-        this.mGriddingLineWidth = strokeWidh;
-        this.mGriddingDensity = density;
+        this.gridLineWidth = strokeWidh;
+        this.gridDensity = density;
     }
 }
 

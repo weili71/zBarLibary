@@ -1,7 +1,8 @@
 package cn.bertsir.zbar;
 
 import android.graphics.Color;
-import android.support.annotation.DrawableRes;
+
+import androidx.annotation.DrawableRes;
 
 import java.io.Serializable;
 
@@ -25,38 +26,38 @@ public class QrConfig implements Serializable {
     public  int TITLE_BACKGROUND_COLOR = Color.parseColor("#ff5f00");
     public  int TITLE_TEXT_COLOR = Color.parseColor("#ffffff");
 
-    public boolean show_title = true;
-    public boolean show_light = true;
-    public boolean show_album = true;
-    public boolean show_des = true;
-    public boolean need_crop = true;
-    public boolean show_zoom = false;
-    public boolean auto_zoom = false;
-    public boolean finger_zoom = false;
-    public boolean only_center = false;
-    public boolean play_sound = true;
-    public boolean double_engine = false;
-    public boolean loop_scan = false;
-    public boolean show_vibrator = false;
-    public String title_text = "扫描二维码";
-    public String des_text = "(识别二维码)";
-    public String open_album_text = "选择要识别的图片";
-    public int line_speed = LINE_FAST;
-    public int line_style = ScanLineView.style_hybrid;
-    public int corner_width = 10;
-    public int loop_wait_time = 0;
+    public boolean showTitle = true;
+    public boolean showLight = true;
+    public boolean showAlbum = true;
+    public boolean showDesc = true;
+    public boolean needCrop = true;
+    public boolean showZoom = false;
+    public boolean autoZoom = false;
+    public boolean fingerZoom = false;
+    public boolean onlyCenter = false;
+    public boolean playSound = true;
+    public boolean doubleEngine = false;
+    public boolean loopScan = false;
+    public boolean showVibrator = false;
+    public String titleText = "扫描二维码";
+    public String descText = "(识别二维码)";
+    public String openAlbumText = "选择要识别的图片";
+    public int lineSpeed = LINE_FAST;
+    public int lineStyle = ScanLineView.styleHybrid;
+    public int cornerWidth = 10;
+    public int loopWaitTime = 0;
 
-    public int back_img_res = R.drawable.scanner_back_img;
-    public int falsh_img_res = R.drawable.scanner_light;
-    public int album_img_res = R.drawable.scanner_album;
-
-
-
-    public boolean auto_light = false;
+    public int backImgRes = R.drawable.scanner_back_img;
+    public int flashImgRes = R.drawable.scanner_light;
+    public int albumImgRes = R.drawable.scanner_album;
 
 
-    public static  int ding_path = R.raw.qrcode;//默认声音
-    public int custombarcodeformat = -1;
+
+    public boolean autoLight = false;
+
+
+    public static  int dingPath = R.raw.qrcode;//默认声音
+    public int customBarCodeFormat = -1;
 
     public static final int TYPE_QRCODE = 1;//扫描二维码
     public  static final int TYPE_BARCODE = 2;//扫描条形码（UPCA）
@@ -69,8 +70,8 @@ public class QrConfig implements Serializable {
     public static final int SCREEN_LANDSCAPE = 2;//屏幕横向
     public static final int SCREEN_SENSOR = 3;//屏幕自动
 
-    public int scan_type = TYPE_QRCODE;//默认只扫描二维码
-    public int scan_view_type = SCANVIEW_TYPE_QRCODE;//默认为二维码扫描框
+    public int scanType = TYPE_QRCODE;//默认只扫描二维码
+    public int scanViewType = SCANVIEW_TYPE_QRCODE;//默认为二维码扫描框
 
     public final static int REQUEST_CAMERA = 99;
     public final static String EXTRA_THIS_CONFIG = "extra_this_config";
@@ -136,132 +137,132 @@ public class QrConfig implements Serializable {
     public static final int BARCODE_CODE128 = 128;
 
 
-    public int getScan_type() {
-        return scan_type;
+    public int getScanType() {
+        return scanType;
     }
 
-    public boolean isPlay_sound() {
-        return play_sound;
+    public boolean isPlaySound() {
+        return playSound;
     }
 
-    public int getCORNER_COLOR() {
+    public int getCornerColor() {
         return CORNER_COLOR;
     }
 
-    public int getLINE_COLOR() {
+    public int getLineColor() {
         return LINE_COLOR;
     }
 
-    public int getTITLE_BACKGROUND_COLOR() {
+    public int getTitleBackgroundColor() {
         return TITLE_BACKGROUND_COLOR;
     }
 
-    public int getTITLE_TEXT_COLOR() {
+    public int getTitleTextColor() {
         return TITLE_TEXT_COLOR;
     }
 
-    public boolean isShow_title() {
-        return show_title;
+    public boolean isShowTitle() {
+        return showTitle;
     }
 
-    public boolean isShow_light() {
-        return show_light;
+    public boolean isShowLight() {
+        return showLight;
     }
 
-    public boolean isShow_album() {
-        return show_album;
+    public boolean isShowAlbum() {
+        return showAlbum;
     }
 
-    public boolean isShow_des() {
-        return show_des;
+    public boolean isShowDesc() {
+        return showDesc;
     }
 
-    public boolean isNeed_crop(){
-        return need_crop;
+    public boolean isNeedCrop(){
+        return needCrop;
     }
 
-    public String getTitle_text() {
-        return title_text;
+    public String getTitleText() {
+        return titleText;
     }
 
-    public String getDes_text() {
-        return des_text;
+    public String getDescText() {
+        return descText;
     }
 
-    public String getOpen_album_text() {
-        return open_album_text;
+    public String getOpenAlbumText() {
+        return openAlbumText;
     }
 
-    public int getLine_speed() {
-        return line_speed;
+    public int getLineSpeed() {
+        return lineSpeed;
     }
 
-    public int getLine_style() {
-        return line_style;
+    public int getLineStyle() {
+        return lineStyle;
     }
 
-    public int getCorner_width() {
-        return corner_width;
+    public int getCornerWidth() {
+        return cornerWidth;
     }
 
-    public int getCustombarcodeformat() {
-        return custombarcodeformat;
+    public int getCustomBarCodeFormat() {
+        return customBarCodeFormat;
     }
 
-    public int getScan_view_type() {
-        return scan_view_type;
+    public int getScanViewType() {
+        return scanViewType;
     }
 
-    public boolean isOnly_center() {
-        return only_center;
+    public boolean isOnlyCenter() {
+        return onlyCenter;
     }
 
-    public static int getDing_path() {
-        return ding_path;
+    public static int getDingPath() {
+        return dingPath;
     }
 
-    public boolean isShow_zoom() {
-        return show_zoom;
+    public boolean isShowZoom() {
+        return showZoom;
     }
 
-    public boolean isAuto_zoom() {
-        return auto_zoom;
+    public boolean isAutoZoom() {
+        return autoZoom;
     }
 
-    public boolean isFinger_zoom() {
-        return finger_zoom;
+    public boolean isFingerZoom() {
+        return fingerZoom;
     }
 
-    public int getSCREEN_ORIENTATION() {
+    public int getScreenOrientation() {
         return SCREEN_ORIENTATION;
     }
 
-    public boolean isDouble_engine() {
-        return double_engine;
+    public boolean isDoubleEngine() {
+        return doubleEngine;
     }
 
-    public boolean isLoop_scan() {
-        return loop_scan;
+    public boolean isLoopScan() {
+        return loopScan;
     }
 
-    public int getLoop_wait_time() {
-        return loop_wait_time;
+    public int getLoopWaitTime() {
+        return loopWaitTime;
     }
 
-    public boolean isAuto_light() {
-        return auto_light;
+    public boolean isAutoLight() {
+        return autoLight;
     }
 
 
-    public boolean isShow_vibrator() {
-        return show_vibrator;
+    public boolean isShowVibrator() {
+        return showVibrator;
     }
 
-    public int getBackImgRes(){ return back_img_res; }
+    public int getBackImgRes(){ return backImgRes; }
 
-    public int getLightImageRes(){return falsh_img_res;}
+    public int getLightImageRes(){return flashImgRes;}
 
-    public int getAblumImageRes(){ return album_img_res;}
+    public int getAlbumImageRes(){ return albumImgRes;}
 
 
     public static class Builder{
@@ -272,7 +273,7 @@ public class QrConfig implements Serializable {
         }
 
         public Builder setLineSpeed(int speed) {
-            watcher.line_speed = speed;
+            watcher.lineSpeed = speed;
             return this;
         }
 
@@ -287,40 +288,40 @@ public class QrConfig implements Serializable {
         }
 
         public Builder setCornerWidth(int dp){
-            watcher.corner_width = dp;
+            watcher.cornerWidth = dp;
             return this;
         }
 
         public Builder setDesText(String text){
-            watcher.des_text = text;
+            watcher.descText = text;
             return this;
         }
 
         public Builder setTitleText(String text){
-            watcher.title_text = text;
+            watcher.titleText = text;
             return this;
         }
 
         public Builder setShowTitle(boolean show){
-            watcher.show_title = show;
+            watcher.showTitle = show;
             return this;
         }
         public Builder setShowLight(boolean show){
-            watcher.show_light = show;
+            watcher.showLight = show;
             return this;
         }
         public Builder setShowAlbum(boolean show){
-            watcher.show_album = show;
+            watcher.showAlbum = show;
             return this;
         }
 
         public Builder setShowDes(boolean show){
-            watcher.show_des = show;
+            watcher.showDesc = show;
             return this;
         }
 
         public Builder setNeedCrop(boolean crop){
-            watcher.need_crop = crop;
+            watcher.needCrop = crop;
             return this;
         }
 
@@ -335,47 +336,47 @@ public class QrConfig implements Serializable {
         }
 
         public Builder setScanType(int type){
-            watcher.scan_type = type;
+            watcher.scanType = type;
             return this;
         }
 
         public Builder setPlaySound(boolean play){
-            watcher.play_sound = play;
+            watcher.playSound = play;
             return this;
         }
 
-        public Builder setCustombarcodeformat(int format){
-            watcher.custombarcodeformat = format;
+        public Builder setCustomBarCodeFormat(int format){
+            watcher.customBarCodeFormat = format;
             return this;
         }
 
         public Builder setScanViewType(int type){
-            watcher.scan_view_type = type;
+            watcher.scanViewType = type;
             return this;
         }
 
         public Builder setIsOnlyCenter(boolean isOnlyCenter){
-            watcher.only_center = isOnlyCenter;
+            watcher.onlyCenter = isOnlyCenter;
             return this;
         }
 
         public Builder setDingPath(int ding){
-            watcher.ding_path = ding;
+            watcher.dingPath = ding;
             return this;
         }
 
         public Builder setShowZoom(boolean zoom){
-            watcher.show_zoom = zoom;
+            watcher.showZoom = zoom;
             return this;
         }
 
         public Builder setAutoZoom(boolean auto){
-            watcher.auto_zoom = auto;
+            watcher.autoZoom = auto;
             return this;
         }
 
         public Builder setFingerZoom(boolean auto){
-            watcher.finger_zoom = auto;
+            watcher.fingerZoom = auto;
             return this;
         }
 
@@ -386,52 +387,52 @@ public class QrConfig implements Serializable {
         }
 
         public Builder setDoubleEngine(boolean open) {
-            watcher.double_engine = open;
+            watcher.doubleEngine = open;
             return this;
         }
 
         public Builder setOpenAlbumText(String text) {
-            watcher.open_album_text = text;
+            watcher.openAlbumText = text;
             return this;
         }
 
         public Builder setLooperScan(boolean looper){
-            watcher.loop_scan = looper;
+            watcher.loopScan = looper;
             return this;
         }
 
         public Builder setLooperWaitTime(int time){
-            watcher.loop_wait_time = time;
+            watcher.loopWaitTime = time;
             return this;
         }
 
         public Builder setScanLineStyle(int style){
-            watcher.line_style = style;
+            watcher.lineStyle = style;
             return this;
         }
 
         public Builder setAutoLight(boolean light){
-            watcher.auto_light = light;
+            watcher.autoLight = light;
             return this;
         }
 
         public Builder setShowVibrator(boolean vibrator){
-            watcher.show_vibrator = vibrator;
+            watcher.showVibrator = vibrator;
             return this;
         }
 
         public Builder setBackImageRes(@DrawableRes int res){
-            watcher.back_img_res = res;
+            watcher.backImgRes = res;
             return this;
         }
 
         public Builder setLightImageRes(@DrawableRes int res){
-            watcher.falsh_img_res = res;
+            watcher.flashImgRes = res;
             return this;
         }
 
-        public Builder setAblumImageRes(@DrawableRes int res){
-            watcher.album_img_res = res;
+        public Builder setAlbumImageRes(@DrawableRes int res){
+            watcher.albumImgRes = res;
             return this;
         }
 

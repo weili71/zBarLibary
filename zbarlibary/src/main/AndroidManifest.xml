@@ -30,6 +30,7 @@
                 android:resource="@xml/qr_file_paths"/>
         </provider>
         <activity android:name="cn.bertsir.zbar.QRActivity"
+            android:theme="@style/AppTheme.NoActionBar"
                   android:configChanges="keyboardHidden|orientation|screenSize"
             />
         <activity

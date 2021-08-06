@@ -18,12 +18,12 @@
         android:layout_margin="30dp"
         >
         <ProgressBar
-            android:id="@+id/pb_loading"
+            android:id="@+id/loading"
             android:layout_width="40dp"
             android:layout_height="40dp"
             />
         <TextView
-            android:id="@+id/tv_hint"
+            android:id="@+id/hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"

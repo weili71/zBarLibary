@@ -58,9 +58,9 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
 
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    private ImageScanner mImageScanner;
-    private Handler mHandler;
-    private ScanCallback mCallback;
+    private ImageScanner imageScanner;
+    private Handler handler;
+    private ScanCallback scanCallback;
     private static final String TAG = "CameraScanAnalysis";
 
     private boolean allowAnalysis = true;
@@ -78,40 +78,40 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
 
     CameraScanAnalysis(Context context) {
         this.context = context;
-        mImageScanner = new ImageScanner();
+        imageScanner = new ImageScanner();
         if (Symbol.scanType == QrConfig.TYPE_QRCODE) {
-            mImageScanner.setConfig(Symbol.NONE, Config.ENABLE, 0);
-            mImageScanner.setConfig(Symbol.QRCODE, Config.ENABLE, 1);
+            imageScanner.setConfig(Symbol.NONE, Config.ENABLE, 0);
+            imageScanner.setConfig(Symbol.QRCODE, Config.ENABLE, 1);
         } else if (Symbol.scanType == QrConfig.TYPE_BARCODE) {
-            mImageScanner.setConfig(Symbol.NONE, Config.ENABLE, 0);
-            mImageScanner.setConfig(Symbol.CODE128, Config.ENABLE, 1);
-            mImageScanner.setConfig(Symbol.CODE39, Config.ENABLE, 1);
-            mImageScanner.setConfig(Symbol.EAN13, Config.ENABLE, 1);
-            mImageScanner.setConfig(Symbol.EAN8, Config.ENABLE, 1);
-            mImageScanner.setConfig(Symbol.UPCA, Config.ENABLE, 1);
-            mImageScanner.setConfig(Symbol.UPCE, Config.ENABLE, 1);
-            mImageScanner.setConfig(Symbol.UPCE, Config.ENABLE, 1);
+            imageScanner.setConfig(Symbol.NONE, Config.ENABLE, 0);
+            imageScanner.setConfig(Symbol.CODE128, Config.ENABLE, 1);
+            imageScanner.setConfig(Symbol.CODE39, Config.ENABLE, 1);
+            imageScanner.setConfig(Symbol.EAN13, Config.ENABLE, 1);
+            imageScanner.setConfig(Symbol.EAN8, Config.ENABLE, 1);
+            imageScanner.setConfig(Symbol.UPCA, Config.ENABLE, 1);
+            imageScanner.setConfig(Symbol.UPCE, Config.ENABLE, 1);
+            imageScanner.setConfig(Symbol.UPCE, Config.ENABLE, 1);
         } else if (Symbol.scanType == QrConfig.TYPE_ALL) {
-            mImageScanner.setConfig(Symbol.NONE, Config.X_DENSITY, 3);
-            mImageScanner.setConfig(Symbol.NONE, Config.Y_DENSITY, 3);
+            imageScanner.setConfig(Symbol.NONE, Config.X_DENSITY, 3);
+            imageScanner.setConfig(Symbol.NONE, Config.Y_DENSITY, 3);
         } else if (Symbol.scanType == QrConfig.TYPE_CUSTOM) {
-            mImageScanner.setConfig(Symbol.NONE, Config.ENABLE, 0);
-            mImageScanner.setConfig(Symbol.scanFormat, Config.ENABLE, 1);
+            imageScanner.setConfig(Symbol.NONE, Config.ENABLE, 0);
+            imageScanner.setConfig(Symbol.scanFormat, Config.ENABLE, 1);
         } else {
-            mImageScanner.setConfig(Symbol.NONE, Config.X_DENSITY, 3);
-            mImageScanner.setConfig(Symbol.NONE, Config.Y_DENSITY, 3);
+            imageScanner.setConfig(Symbol.NONE, Config.X_DENSITY, 3);
+            imageScanner.setConfig(Symbol.NONE, Config.Y_DENSITY, 3);
         }
 
-        mHandler = new Handler(Looper.getMainLooper()) {
+        handler = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
-                if (mCallback != null) mCallback.onScanResult((ScanResult) msg.obj);
+                if (scanCallback != null) scanCallback.onScanResult((ScanResult) msg.obj);
             }
         };
     }
 
     void setScanCallback(ScanCallback callback) {
-        this.mCallback = callback;
+        this.scanCallback = callback;
     }
 
     void onStop() {
@@ -219,12 +219,12 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
                 }
             }
 
-            int result = mImageScanner.scanImage(barcode);
+            int result = imageScanner.scanImage(barcode);
 
             String resultStr = null;
             int resultType = -1;
             if (result != 0) {
-                SymbolSet symSet = mImageScanner.getResults();
+                SymbolSet symSet = imageScanner.getResults();
                 for (Symbol sym : symSet){
                     resultStr = sym.getData();
                     resultType= sym.getType();
@@ -236,7 +236,7 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
                 ScanResult scanResult = new ScanResult();
                 scanResult.setContent(resultStr);
                 scanResult.setType(resultType == Symbol.QRCODE ? ScanResult.CODE_QR : ScanResult.CODE_BAR);
-                Message message = mHandler.obtainMessage();
+                Message message = handler.obtainMessage();
                 message.obj = scanResult;
                 message.sendToTarget();
                 lastResultTime = System.currentTimeMillis();
@@ -292,7 +292,7 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
                     ScanResult scanResult = new ScanResult();
                     scanResult.setContent(resultStr);
                     scanResult.setType(resultFormat == BarcodeFormat.QR_CODE ? ScanResult.CODE_QR : ScanResult.CODE_BAR);
-                    Message message = mHandler.obtainMessage();
+                    Message message = handler.obtainMessage();
                     message.obj = scanResult;
                     message.sendToTarget();
                     lastResultTime = System.currentTimeMillis();

@@ -30,14 +30,14 @@ import cn.bertsir.zbar.utils.QRUtils;
 public final class CameraManager {
     private static final String TAG = "CameraManager";
 
-    private final CameraConfiguration mConfiguration;
+    private final CameraConfiguration configuration;
     private Context context;
 
-    private Camera mCamera;
+    private Camera camera;
 
     public CameraManager(Context context) {
         this.context = context;
-        this.mConfiguration = new CameraConfiguration(context);
+        this.configuration = new CameraConfiguration(context);
     }
 
     /**
@@ -46,26 +46,26 @@ public final class CameraManager {
      * @throws Exception ICamera open failed, occupied or abnormal.
      */
     public synchronized void openDriver() throws Exception {
-        if (mCamera != null) return;
+        if (camera != null) return;
 
-        mCamera = Camera.open();
-        if (mCamera == null) throw new IOException("The camera is occupied.");
+        camera = Camera.open();
+        if (camera == null) throw new IOException("The camera is occupied.");
 
-        mConfiguration.initFromCameraParameters(mCamera);
+        configuration.initFromCameraParameters(camera);
 
-        Camera.Parameters parameters = mCamera.getParameters();
+        Camera.Parameters parameters = camera.getParameters();
         String parametersFlattened = parameters == null ? null : parameters.flatten();
         try {
-            mConfiguration.setDesiredCameraParameters(mCamera, false);
+            configuration.setDesiredCameraParameters(camera, false);
 
         } catch (RuntimeException re) {
             if (parametersFlattened != null) {
-                parameters = mCamera.getParameters();
+                parameters = camera.getParameters();
                 parameters.unflatten(parametersFlattened);
                 try {
-                    mCamera.setParameters(parameters);
+                    camera.setParameters(parameters);
 
-                    mConfiguration.setDesiredCameraParameters(mCamera, true);
+                    configuration.setDesiredCameraParameters(camera, true);
                 } catch (RuntimeException e) {
                     e.printStackTrace();
                 }
@@ -77,10 +77,10 @@ public final class CameraManager {
      * Closes the camera driver if still in use.
      */
     public synchronized void closeDriver() {
-        if (mCamera != null) {
-            mCamera.setPreviewCallback(null);
-            mCamera.release();
-            mCamera = null;
+        if (camera != null) {
+            camera.setPreviewCallback(null);
+            camera.release();
+            camera = null;
         }
     }
 
@@ -90,7 +90,7 @@ public final class CameraManager {
      * @return true, other wise false.
      */
     public boolean isOpen() {
-        return mCamera != null;
+        return camera != null;
     }
 
     /**
@@ -99,7 +99,7 @@ public final class CameraManager {
      * @return {@link CameraConfiguration}.
      */
     public CameraConfiguration getConfiguration() {
-        return mConfiguration;
+        return configuration;
     }
 
     /**
@@ -110,17 +110,17 @@ public final class CameraManager {
      * @throws IOException if the method fails (for example, if the surface is unavailable or unsuitable).
      */
     public void startPreview(SurfaceHolder holder, Camera.PreviewCallback previewCallback) throws IOException {
-        if (mCamera != null) {
+        if (camera != null) {
             //解决nexus5x扫码倒立的情况
             if(android.os.Build.MANUFACTURER.equals("LGE") &&
                     android.os.Build.MODEL.equals("Nexus 5X")) {
-                mCamera.setDisplayOrientation(QRUtils.getInstance().isScreenOriatationPortrait(context) ? 270 : 180);
+                camera.setDisplayOrientation(QRUtils.getInstance().isScreenOriatationPortrait(context) ? 270 : 180);
             }else {
-                mCamera.setDisplayOrientation(QRUtils.getInstance().isScreenOriatationPortrait(context) ? 90 : 0);
+                camera.setDisplayOrientation(QRUtils.getInstance().isScreenOriatationPortrait(context) ? 90 : 0);
             }
-            mCamera.setPreviewDisplay(holder);
-            mCamera.setPreviewCallback(previewCallback);
-            mCamera.startPreview();
+            camera.setPreviewDisplay(holder);
+            camera.setPreviewCallback(previewCallback);
+            camera.startPreview();
         }
     }
 
@@ -129,14 +129,14 @@ public final class CameraManager {
      * Camera stop preview.
      */
     public void stopPreview() {
-        if (mCamera != null) {
+        if (camera != null) {
             try {
-                mCamera.stopPreview();
+                camera.stopPreview();
             } catch (Exception ignored) {
                 // nothing.
             }
             try {
-                mCamera.setPreviewDisplay(null);
+                camera.setPreviewDisplay(null);
             } catch (IOException ignored) {
                 // nothing.
             }
@@ -149,9 +149,9 @@ public final class CameraManager {
      * @param callback {@link Camera.AutoFocusCallback}.
      */
     public void autoFocus(Camera.AutoFocusCallback callback) {
-        if (mCamera != null)
+        if (camera != null)
             try {
-                mCamera.autoFocus(callback);
+                camera.autoFocus(callback);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -161,8 +161,8 @@ public final class CameraManager {
      * set Camera Flash
      */
     public void setFlash(){
-        if(mCamera != null){
-            Camera.Parameters parameters = mCamera.getParameters();
+        if(camera != null){
+            Camera.Parameters parameters = camera.getParameters();
             if(parameters.getFlashMode() == null) {
                 return;
             }
@@ -171,7 +171,7 @@ public final class CameraManager {
             }else {
                 parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
             }
-            mCamera.setParameters(parameters);
+            camera.setParameters(parameters);
         }
     }
 
@@ -179,8 +179,8 @@ public final class CameraManager {
      * set Camera Flash
      */
     public void setFlash(boolean open){
-        if(mCamera != null){
-            Camera.Parameters parameters = mCamera.getParameters();
+        if(camera != null){
+            Camera.Parameters parameters = camera.getParameters();
             if(parameters.getFlashMode() == null) {
                 return;
             }
@@ -193,7 +193,7 @@ public final class CameraManager {
                     parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
                 }
             }
-            mCamera.setParameters(parameters);
+            camera.setParameters(parameters);
         }
     }
 
@@ -201,8 +201,8 @@ public final class CameraManager {
      * 相机设置焦距
      */
     public void setCameraZoom(float ratio){
-        if(mCamera != null){
-            Camera.Parameters parameters = mCamera.getParameters();
+        if(camera != null){
+            Camera.Parameters parameters = camera.getParameters();
             if(!parameters.isZoomSupported()){
                 return;
             }
@@ -212,14 +212,14 @@ public final class CameraManager {
             }
             int zoom = (int) (maxZoom * ratio);
             parameters.setZoom(zoom);
-            mCamera.setParameters(parameters);
+            camera.setParameters(parameters);
         }
     }
 
 
     public void handleZoom(boolean isZoomIn) {
-        if(mCamera != null){
-            Camera.Parameters params = mCamera.getParameters();
+        if(camera != null){
+            Camera.Parameters params = camera.getParameters();
             if (params.isZoomSupported()) {
                 int maxZoom = params.getMaxZoom();
                 int zoom = params.getZoom();
@@ -229,7 +229,7 @@ public final class CameraManager {
                     zoom--;
                 }
                 params.setZoom(zoom);
-                mCamera.setParameters(params);
+                camera.setParameters(params);
             } else {
                 Log.i(TAG, "zoom not supported");
             }

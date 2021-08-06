@@ -30,9 +30,9 @@ import android.widget.Toast;
  */
 public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback {
 
-    private CameraManager mCameraManager;
-    private CameraScanAnalysis mPreviewCallback;
-    private SurfaceView mSurfaceView;
+    private CameraManager cameraManager;
+    private CameraScanAnalysis previewCallback;
+    private SurfaceView surfaceView;
     private boolean isPreviewStart = false;
 
     public CameraPreview(Context context) {
@@ -46,8 +46,8 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
     public CameraPreview(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        mCameraManager = new CameraManager(context);
-        mPreviewCallback = new CameraScanAnalysis(context);
+        cameraManager = new CameraManager(context);
+        previewCallback = new CameraScanAnalysis(context);
     }
 
     /**
@@ -56,7 +56,7 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
      * @param callback {@link ScanCallback}.
      */
     public void setScanCallback(ScanCallback callback) {
-        mPreviewCallback.setScanCallback(callback);
+        previewCallback.setScanCallback(callback);
     }
 
     /**
@@ -64,22 +64,22 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
      */
     public boolean start() {
         try {
-            mCameraManager.openDriver();
+            cameraManager.openDriver();
         } catch (Exception e) {
             Toast.makeText(getContext(), "摄像头权限被拒绝！", Toast.LENGTH_SHORT).show();
             return false;
         }
-        mPreviewCallback.onStart();
+        previewCallback.onStart();
 
-        if (mSurfaceView == null) {
-            mSurfaceView = new SurfaceView(getContext());
-            addView(mSurfaceView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        if (surfaceView == null) {
+            surfaceView = new SurfaceView(getContext());
+            addView(surfaceView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-            SurfaceHolder holder = mSurfaceView.getHolder();
+            SurfaceHolder holder = surfaceView.getHolder();
             holder.addCallback(this);
             holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         }
-        startCameraPreview(mSurfaceView.getHolder());
+        startCameraPreview(surfaceView.getHolder());
         return true;
     }
 
@@ -87,17 +87,17 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
      * Camera stop preview.
      */
     public void stop() {
-        removeCallbacks(mAutoFocusTask);
-        mPreviewCallback.onStop();
+        removeCallbacks(autoFocusTask);
+        previewCallback.onStop();
 
-        mCameraManager.stopPreview();
-        mCameraManager.closeDriver();
+        cameraManager.stopPreview();
+        cameraManager.closeDriver();
     }
 
     private void startCameraPreview(SurfaceHolder holder) {
         try {
-            mCameraManager.startPreview(holder, mPreviewCallback);
-            mCameraManager.autoFocus(mFocusCallback);
+            cameraManager.startPreview(holder, previewCallback);
+            cameraManager.autoFocus(focusCallback);
             isPreviewStart = true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -105,7 +105,7 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mCameraManager.autoFocus(mFocusCallback);
+                    cameraManager.autoFocus(focusCallback);
                 }
             }, 200);
         }
@@ -120,7 +120,7 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
         if (holder.getSurface() == null) {
             return;
         }
-        mCameraManager.stopPreview();
+        cameraManager.stopPreview();
         startCameraPreview(holder);
     }
 
@@ -128,15 +128,15 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
     public void surfaceDestroyed(SurfaceHolder holder) {
     }
 
-    private Camera.AutoFocusCallback mFocusCallback = new Camera.AutoFocusCallback() {
+    private Camera.AutoFocusCallback focusCallback = new Camera.AutoFocusCallback() {
         public void onAutoFocus(boolean success, Camera camera) {
-            postDelayed(mAutoFocusTask, 500);
+            postDelayed(autoFocusTask, 500);
         }
     };
 
-    private Runnable mAutoFocusTask = new Runnable() {
+    private Runnable autoFocusTask = new Runnable() {
         public void run() {
-            mCameraManager.autoFocus(mFocusCallback);
+            cameraManager.autoFocus(focusCallback);
         }
     };
 
@@ -147,19 +147,19 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
     }
 
     public void setFlash() {
-        mCameraManager.setFlash();
+        cameraManager.setFlash();
     }
 
     public void setFlash(boolean open) {
-        mCameraManager.setFlash(open);
+        cameraManager.setFlash(open);
     }
 
     public void setZoom(float zoom){
-        mCameraManager.setCameraZoom(zoom);
+        cameraManager.setCameraZoom(zoom);
     }
 
     public void handleZoom(boolean isZoomIn){
-        mCameraManager.handleZoom(isZoomIn);
+        cameraManager.handleZoom(isZoomIn);
     }
 
     public boolean isPreviewStart(){

@@ -1,19 +1,20 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 version = "1.4.2" // 修改为你的版本号
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 31
+//    buildToolsVersion '26.0.2'
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 22
+        minSdkVersion 21
+        targetSdkVersion 31
         versionCode 142
         versionName "1.4.2"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
     }
     buildTypes {
@@ -28,13 +29,19 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'androidx.appcompat:appcompat:1.0.0'
     compile 'com.google.zxing:core:3.3.0'
     compile 'com.soundcloud.android:android-crop:1.0.1@aar'
+    implementation "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 def siteUrl = 'https://github.com/bertsir/zBarLibary'
@@ -108,5 +115,8 @@ bintray {
         licenses = ["Apache-2.0"]
         publish = true
     }
+}
+repositories {
+    mavenCentral()
 }
 //先执行   chmod a+x ./gradlew   ./gradlew install ，然后执行 ./gradlew bintrayUpload

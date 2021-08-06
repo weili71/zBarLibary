@@ -1,6 +1,6 @@
 package cn.bertsir.zbar.utils;
 
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 
 /**
  * Created by Bert on 2019/3/4.

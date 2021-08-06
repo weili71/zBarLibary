@@ -21,7 +21,6 @@ import cn.bertsir.zbar.Qr.ScanResult;
  * <p>Scan results callback.</p>
  */
 public interface ScanCallback {
-
     /**
      * 扫描结果回调
      *

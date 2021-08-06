@@ -34,14 +34,14 @@
                 />
 
             <FrameLayout
-                android:id="@+id/fl_scan"
+                android:id="@+id/scan"
                 android:layout_width="@dimen/scan_frame_width"
                 android:layout_height="@dimen/scan_frame_width"
                 android:layout_gravity="center_horizontal"
                 >
 
                 <cn.bertsir.zbar.view.CornerView
-                    android:id="@+id/cnv_left_top"
+                    android:id="@+id/left_top"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     app:corner_width="5dp"
@@ -50,7 +50,7 @@
 
 
                 <cn.bertsir.zbar.view.CornerView
-                    android:id="@+id/cnv_left_bottom"
+                    android:id="@+id/left_bottom"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     app:corner_width="5dp"
@@ -59,7 +59,7 @@
                     />
 
                 <cn.bertsir.zbar.view.CornerView
-                    android:id="@+id/cnv_right_top"
+                    android:id="@+id/right_top"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     app:corner_width="5dp"
@@ -69,7 +69,7 @@
 
 
                 <cn.bertsir.zbar.view.CornerView
-                    android:id="@+id/cnv_right_bottom"
+                    android:id="@+id/right_bottom"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     app:corner_width="5dp"
@@ -79,10 +79,9 @@
 
 
                 <cn.bertsir.zbar.view.ScanLineView
-                    android:id="@+id/iv_scan_line"
+                    android:id="@+id/scan_line"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    />
+                    android:layout_height="match_parent" />
 
             </FrameLayout>
 
