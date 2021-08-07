@@ -1,9 +1,9 @@
-package cn.bertsir.zbar
+package cn.bertsir.qrtest
 
+import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -16,18 +16,21 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.text.TextUtils
-import android.view.MotionEvent
-import android.view.View
-import android.view.WindowManager
+import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import cn.bertsir.qrtest.databinding.ActivityQrBinding
 import cn.bertsir.zbar.Qr.ScanResult
 import cn.bertsir.zbar.Qr.Symbol
-import cn.bertsir.zbar.databinding.ActivityQrBinding
+import cn.bertsir.zbar.QrConfig
+import cn.bertsir.zbar.QrManager
+import cn.bertsir.zbar.ScanCallback
 import cn.bertsir.zbar.utils.GetPathFromUri
 import cn.bertsir.zbar.utils.QRUtils
 import cn.bertsir.zbar.utils.SizeUtil
-import com.soundcloud.android.crop.Crop
+import com.esafirm.imagepicker.features.*
+import com.permissionx.guolindev.PermissionX
+//import com.soundcloud.android.crop.Crop
 import java.io.File
 
 class QRActivity : AppCompatActivity(), SensorEventListener {
@@ -46,6 +49,7 @@ class QRActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
+    private var flashSwitch: CheckBox?=null
     private lateinit var soundPool: SoundPool
     private lateinit var binding: ActivityQrBinding
     private lateinit var options: QrConfig
@@ -63,9 +67,12 @@ class QRActivity : AppCompatActivity(), SensorEventListener {
         super.onCreate(savedInstanceState)
         binding = ActivityQrBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val window = window
-        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        //        Log.i("zBarLibary", "version: "+BuildConfig.VERSION_NAME);
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//        val window = window
+//        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
         options = intent.getSerializableExtra(QrConfig.EXTRA_THIS_CONFIG) as QrConfig
         initParameters()
         initView()
@@ -75,12 +82,6 @@ class QRActivity : AppCompatActivity(), SensorEventListener {
      * 初始化参数
      */
     private fun initParameters() {
-        requestedOrientation = when (options.screenOrientation) {
-            QrConfig.SCREEN_LANDSCAPE -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            QrConfig.SCREEN_PORTRAIT -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-            QrConfig.SCREEN_SENSOR -> ActivityInfo.SCREEN_ORIENTATION_SENSOR
-            else -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        }
         Symbol.scanType = options.scanType
         Symbol.scanFormat = options.customBarCodeFormat
         Symbol.is_only_scan_center = options.isOnlyCenter
@@ -100,45 +101,27 @@ class QRActivity : AppCompatActivity(), SensorEventListener {
      */
     private fun initView() {
         //bi~
+        title = options.title
         if (options.scannerWidth == QrConfig.DEFAULT_SCANNER_WIDTH) {
             val defaultSize = SizeUtil.dip2px(this, 300)
             binding.scanView.setScannerWidth(defaultSize)
-        }else{
+        } else {
             binding.scanView.setScannerWidth(options.scannerWidth)
         }
         if (options.scannerHeight == QrConfig.DEFAULT_SCANNER_HEIGHT) {
             val defaultSize = SizeUtil.dip2px(this, 300)
             binding.scanView.setScannerHeight(defaultSize)
-        }else{
+        } else {
             binding.scanView.setScannerHeight(options.scannerWidth)
         }
 
         soundPool = SoundPool(10, AudioManager.STREAM_SYSTEM, 5)
         soundPool.load(this, QrConfig.getDingPath(), 1)
         binding.scanView.setType(options.getScanViewType())
-        binding.flash.setImageResource(options.lightImageRes)
-        binding.album.setImageResource(options.albumImageRes)
-        binding.album.setOnClickListener { fromAlbum() }
-        binding.flash.setOnClickListener { binding.cameraPreview.setFlash() }
-
-//        iv_album.visibility = if (options.isShow_light) View.VISIBLE else View.GONE
-        binding.flash.visibility = if (options.isShowLight) View.VISIBLE else View.GONE
-        binding.album.visibility = if (options.isShowAlbum) View.VISIBLE else View.GONE
-        binding.desc.visibility = if (options.isShowDesc) View.VISIBLE else View.GONE
-        binding.zoom.visibility = if (options.isShowZoom) View.VISIBLE else View.GONE
-        binding.desc.text = options.getDescText()
         binding.scanView.setCornerColor(options.cornerColor)
         binding.scanView.setLineSpeed(options.getLineSpeed())
         binding.scanView.setLineColor(options.lineColor)
         binding.scanView.setScanLineStyle(options.getLineStyle())
-        binding.zoom.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                binding.cameraPreview.setZoom(progress / 100f)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar) {}
-        })
     }
 
     /**
@@ -169,8 +152,11 @@ class QRActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onResume() {
         super.onResume()
-        binding.cameraPreview.setScanCallback(resultCallback)
-        binding.cameraPreview.start()
+        flashSwitch?.isChecked= false
+        binding.cameraPreview.apply {
+            setScanCallback(resultCallback)
+        }.start()
+
         //一般在Resume方法中注册
         /**
          * 第三个参数决定传感器信息更新速度
@@ -209,9 +195,9 @@ class QRActivity : AppCompatActivity(), SensorEventListener {
                         recognitionLocation(data?.data)
                     }
                 }
-                Crop.REQUEST_CROP -> {
-                    recognitionLocation(uriCropFile)
-                }
+//                Crop.REQUEST_CROP -> {
+//                    recognitionLocation(uriCropFile)
+//                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
@@ -314,7 +300,7 @@ class QRActivity : AppCompatActivity(), SensorEventListener {
      */
     fun cropPhoto(uri: Uri?) {
         uriCropFile = Uri.parse("file:///$cropTempPath")
-        Crop.of(uri, uriCropFile).asSquare().start(this)
+//        Crop.of(uri, uriCropFile).asSquare().start(this)
     }
 
     private fun closeProgressDialog() {
@@ -364,5 +350,116 @@ class QRActivity : AppCompatActivity(), SensorEventListener {
     }
 
     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_qr, menu)
+
+        flashSwitch = menu.findItem(R.id.flash_switch).actionView as CheckBox
+        flashSwitch!!.setOnCheckedChangeListener { button, isChecked ->
+            binding.cameraPreview.setFlash(isChecked)
+        }
+
+        if (!options.isShowAlbum) {
+            menu.findItem(R.id.open_album).isVisible = false
+        }
+        if (!options.isShowLight) {
+            menu.findItem(R.id.flash_switch).isVisible = false
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+            }
+            R.id.open_album -> {
+                PermissionX.init(this)
+                    .permissions(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    )
+                    .explainReasonBeforeRequest()
+                    .onExplainRequestReason { scope, deniedList ->
+                        scope.showRequestReasonDialog(deniedList, "获取图片需要相册权限", "去授权", "取消")
+                    }
+                    .onForwardToSettings { scope, deniedList ->
+                        scope.showForwardToSettingsDialog(
+                            deniedList,
+                            "您需要在“设置”中手动授予必要的权限",
+                            "去授权",
+                            "取消"
+                        )
+                    }
+                    .request { allGranted, grantedList, deniedList ->
+                        if (allGranted) {
+                            imagePickerLauncher.launch(createConfig())
+                        } else {
+                            toast(this, "相机权限被拒绝")
+                        }
+                    }
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+        return false
+    }
+
+    val imagePickerLauncher = registerImagePicker {
+        it.getOrNull(0)?.apply {
+            recognitionLocation(uri)
+        }
+    }
+
+    private fun createConfig(): ImagePickerConfig {
+        val returnAfterCapture = false
+        val isSingleMode = true
+        val useCustomImageLoader = false
+        val folderMode = false
+        val includeVideo = false
+        val onlyVideo = false
+        val isExclude = false
+
+//        ImagePickerComponentsHolder.setInternalComponent(
+//            CustomImagePickerComponents(this, useCustomImageLoader)
+//        )
+
+        return ImagePickerConfig {
+            mode = ImagePickerMode.SINGLE
+            language = "in" // Set image picker language
+            theme = R.style.AppTheme_NoActionBar
+            // set whether pick action or camera action should return immediate result or not. Only works in single mode for image picker
+            returnMode = if (returnAfterCapture) ReturnMode.ALL else ReturnMode.NONE
+            isFolderMode = folderMode // set folder mode (false by default)
+            isIncludeVideo = includeVideo // include video (false by default)
+            isOnlyVideo = onlyVideo // include video (false by default)
+//            arrowColor = Color.RED // set toolbar arrow up color
+            folderTitle = "文件夹" // folder selection title
+            imageTitle = "选择图片" // image selection title
+            doneButtonText = "完成" // done button text
+            showDoneButtonAlways = true // Show done button always or not
+            limit = 1 // max images can be selected (99 by default)
+            isShowCamera = true // show camera or not (true by default)
+            savePath =
+                ImagePickerSavePath("Camera") // captured image directory name ("Camera" folder by default)
+            savePath = ImagePickerSavePath(
+                Environment.getExternalStorageDirectory().path,
+                isRelative = false
+            ) // can be a full path
+
+//            if (isExclude) {
+//                excludedImages = images.toFiles() // don't show anything on this selected images
+//            } else {
+//                selectedImages = images  // original selected images, used in multi mode
+//            }
+        }
+    }
 
 }

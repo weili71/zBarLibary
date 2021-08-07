@@ -114,9 +114,9 @@ public final class CameraManager {
             //解决nexus5x扫码倒立的情况
             if(android.os.Build.MANUFACTURER.equals("LGE") &&
                     android.os.Build.MODEL.equals("Nexus 5X")) {
-                camera.setDisplayOrientation(QRUtils.getInstance().isScreenOriatationPortrait(context) ? 270 : 180);
+                camera.setDisplayOrientation(QRUtils.getInstance().isScreenOrientationPortrait(context) ? 270 : 180);
             }else {
-                camera.setDisplayOrientation(QRUtils.getInstance().isScreenOriatationPortrait(context) ? 90 : 0);
+                camera.setDisplayOrientation(QRUtils.getInstance().isScreenOrientationPortrait(context) ? 90 : 0);
             }
             camera.setPreviewDisplay(holder);
             camera.setPreviewCallback(previewCallback);

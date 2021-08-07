@@ -39,7 +39,7 @@ public class QrConfig implements Serializable {
     public boolean doubleEngine = false;
     public boolean loopScan = false;
     public boolean showVibrator = false;
-    public String titleText = "扫描二维码";
+    public String title = "扫描二维码";
     public String descText = "(识别二维码)";
     public String openAlbumText = "选择要识别的图片";
     public int lineSpeed = LINE_FAST;
@@ -193,8 +193,8 @@ public class QrConfig implements Serializable {
         return needCrop;
     }
 
-    public String getTitleText() {
-        return titleText;
+    public String getTitle() {
+        return title;
     }
 
     public String getDescText() {
@@ -266,7 +266,7 @@ public class QrConfig implements Serializable {
     }
 
 
-    public boolean isShowVibrator() {
+    public boolean isEnableVibrator() {
         return showVibrator;
     }
 
@@ -332,7 +332,7 @@ public class QrConfig implements Serializable {
         }
 
         public Builder setTitleText(String text) {
-            watcher.titleText = text;
+            watcher.title = text;
             return this;
         }
 
@@ -401,6 +401,7 @@ public class QrConfig implements Serializable {
             return this;
         }
 
+        @Deprecated
         public Builder setShowZoom(boolean zoom) {
             watcher.showZoom = zoom;
             return this;

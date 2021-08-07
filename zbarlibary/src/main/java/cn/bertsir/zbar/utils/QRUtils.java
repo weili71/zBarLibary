@@ -559,13 +559,7 @@ public class QRUtils {
     public int getScreenWidth(Context mContext) {
         WindowManager wm = (WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE);
         Point point = new Point();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            //noinspection ConstantConditions
-            wm.getDefaultDisplay().getRealSize(point);
-        } else {
-            //noinspection ConstantConditions
-            wm.getDefaultDisplay().getSize(point);
-        }
+        wm.getDefaultDisplay().getRealSize(point);
         return point.x;
     }
 
@@ -577,13 +571,7 @@ public class QRUtils {
     public int getScreenHeight(Context mContext) {
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Point point = new Point();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            //noinspection ConstantConditions
-            wm.getDefaultDisplay().getRealSize(point);
-        } else {
-            //noinspection ConstantConditions
-            wm.getDefaultDisplay().getSize(point);
-        }
+        wm.getDefaultDisplay().getRealSize(point);
         return point.y;
     }
 
@@ -592,7 +580,7 @@ public class QRUtils {
      * @param context
      * @return 当且仅当当前屏幕为竖屏时返回true,否则返回false。
      */
-    public  boolean isScreenOriatationPortrait(Context context) {
+    public  boolean isScreenOrientationPortrait(Context context) {
         return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
     }
 

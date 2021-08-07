@@ -185,7 +185,7 @@ class CameraScanAnalysis implements Camera.PreviewCallback {
         public void run() {
 
             if (Symbol.is_auto_zoom && Symbol.scanType == QrConfig.TYPE_QRCODE
-                    && QRUtils.getInstance().isScreenOriatationPortrait(context)) {
+                    && QRUtils.getInstance().isScreenOrientationPortrait(context)) {
 
                 if(Symbol.is_only_scan_center){
                     if (Symbol.cropX == 0 || Symbol.cropY == 0 || cropWidth == 0 || cropHeight == 0) {

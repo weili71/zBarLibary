@@ -37,35 +37,35 @@ public class QrManager {
         return this;
     }
 
-    public void startScan(final Activity activity, OnScanResultCallback resultCall){
+    public void registerCallback(final Activity activity, OnScanResultCallback resultCall){
 
         if (options == null) {
             options = new QrConfig.Builder().create();
         }
 
 
-        PermissionUtils.permission(activity, PermissionConstants.CAMERA,PermissionConstants.STORAGE)
-                .rationale(new PermissionUtils.OnRationaleListener() {
-                    @Override
-                    public void rationale(final ShouldRequest shouldRequest) {
-                        shouldRequest.again(true);
-                    }
-                })
-                .callback(new PermissionUtils.FullCallback() {
-                    @Override
-                    public void onGranted(List<String> permissionsGranted) {
-                        Intent intent = new Intent(activity, QRActivity.class);
-                        intent.putExtra(QrConfig.EXTRA_THIS_CONFIG, options);
-                        activity.startActivity(intent);
-                    }
-
-                    @Override
-                    public void onDenied(List<String> permissionsDeniedForever,
-                                         List<String> permissionsDenied) {
-                        Toast.makeText(activity,"摄像头权限被拒绝！",Toast.LENGTH_SHORT).show();
-
-                    }
-                }).request();
+//        PermissionUtils.permission(activity, PermissionConstants.CAMERA,PermissionConstants.STORAGE)
+//                .rationale(new PermissionUtils.OnRationaleListener() {
+//                    @Override
+//                    public void rationale(final ShouldRequest shouldRequest) {
+//                        shouldRequest.again(true);
+//                    }
+//                })
+//                .callback(new PermissionUtils.FullCallback() {
+//                    @Override
+//                    public void onGranted(List<String> permissionsGranted) {
+//                        Intent intent = new Intent(activity, QRActivity.class);
+//                        intent.putExtra(QrConfig.EXTRA_THIS_CONFIG, options);
+//                        activity.startActivity(intent);
+//                    }
+//
+//                    @Override
+//                    public void onDenied(List<String> permissionsDeniedForever,
+//                                         List<String> permissionsDenied) {
+//                        Toast.makeText(activity,"摄像头权限被拒绝！",Toast.LENGTH_SHORT).show();
+//
+//                    }
+//                }).request();
 
 
 

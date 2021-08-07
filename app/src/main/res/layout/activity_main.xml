@@ -21,26 +21,26 @@
           >
 
          <EditText
-             android:id="@+id/et_qr_title"
+             android:id="@+id/qr_title"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:text="扫描二维码"
              />
          <EditText
-             android:id="@+id/et_qr_des"
+             android:id="@+id/qr_desc"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:text="(识别二维码)"
              />
          <CheckBox
-             android:id="@+id/cb_show_title"
+             android:id="@+id/show_title"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="是否显示Title"
              android:checked="true"
              />
          <CheckBox
-             android:id="@+id/cd_show_des"
+             android:id="@+id/show_desc"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="是否显示底部描述"
@@ -48,7 +48,7 @@
              />
 
          <CheckBox
-             android:id="@+id/cb_show_ding"
+             android:id="@+id/show_ding"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="是否有提示音"
@@ -62,42 +62,42 @@
              android:checked="true"
              />
          <CheckBox
-             android:id="@+id/cb_show_flash"
+             android:id="@+id/show_flash"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="是否显示手电筒"
              android:checked="true"
              />
          <CheckBox
-             android:id="@+id/cb_show_album"
+             android:id="@+id/show_album"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="是否从相册选择"
              android:checked="true"
              />
          <CheckBox
-             android:id="@+id/cb_only_center"
+             android:id="@+id/only_center"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="是否只扫描框中内容"
              android:checked="true"
              />
          <CheckBox
-             android:id="@+id/cb_create_add_water"
+             android:id="@+id/create_qr_code_with_logo"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="生成二维码添加logo"
              android:checked="true"
              />
          <CheckBox
-             android:id="@+id/cb_crop_image"
+             android:id="@+id/crop_image"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="从相册选择并裁剪"
              android:checked="true"
              />
          <CheckBox
-             android:id="@+id/cb_show_zoom"
+             android:id="@+id/show_zoom"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="开启手动缩放(滑块)"
@@ -105,21 +105,21 @@
              />
 
          <CheckBox
-             android:id="@+id/cb_auto_zoom"
+             android:id="@+id/auto_zoom"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="开启自动缩放"
              android:checked="true"
              />
          <CheckBox
-             android:id="@+id/cb_finger_zoom"
+             android:id="@+id/finger_zoom"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="开启双指缩放"
              android:checked="true"
              />
          <CheckBox
-             android:id="@+id/cb_double_engine"
+             android:id="@+id/double_engine"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="双识别引擎"
@@ -127,21 +127,21 @@
              />
 
           <CheckBox
-              android:id="@+id/cb_loop_scan"
+              android:id="@+id/loop_scan"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="连续扫描"
               android:checked="true"
               />
          <CheckBox
-             android:id="@+id/cb_auto_light"
+             android:id="@+id/auto_light"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="自动灯光"
              android:checked="false"
              />
          <CheckBox
-             android:id="@+id/cb_have_vibrator"
+             android:id="@+id/have_vibrator"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="震动提醒"
@@ -160,7 +160,7 @@
                 android:textColor="@android:color/black"
                 />
             <EditText
-                android:id="@+id/et_loop_scan_time"
+                android:id="@+id/loop_scan_time"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:inputType="number"
@@ -259,27 +259,27 @@
 
 
          <Button
-             android:id="@+id/bt_scan"
+             android:id="@+id/scan"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:text="扫描"
              />
 
          <Button
-             android:id="@+id/bt_make"
+             android:id="@+id/make"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:text="生成"
              />
 
          <EditText
-             android:id="@+id/et_qr_content"
+             android:id="@+id/qr_content"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:text="二维码内容" />
 
          <ImageView
-             android:id="@+id/iv_qr"
+             android:id="@+id/qr"
              android:layout_width="200dp"
              android:layout_height="200dp"
              android:layout_gravity="center"

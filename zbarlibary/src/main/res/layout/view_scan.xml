@@ -1,110 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <!-- 扫描动画 -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scaleType="fitXY"
+        android:src="@drawable/shadow" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:src="@drawable/shadow"
-            android:scaleType="fitXY"
-            />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
-            >
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/shadow"
-                android:layout_weight="1"
-                android:scaleType="fitXY"
-                />
-
-            <FrameLayout
-                android:id="@+id/scan"
-                android:layout_width="@dimen/scan_frame_width"
-                android:layout_height="@dimen/scan_frame_width"
-                android:layout_gravity="center_horizontal"
-                >
-
-                <cn.bertsir.zbar.view.CornerView
-                    android:id="@+id/left_top"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    app:corner_width="5dp"
-                    app:corner_gravity="leftTop"
-                    />
-
-
-                <cn.bertsir.zbar.view.CornerView
-                    android:id="@+id/left_bottom"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    app:corner_width="5dp"
-                    app:corner_gravity="leftBottom"
-                    android:layout_gravity="bottom|left"
-                    />
-
-                <cn.bertsir.zbar.view.CornerView
-                    android:id="@+id/right_top"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    app:corner_width="5dp"
-                    app:corner_gravity="rightTop"
-                    android:layout_gravity="right|top"
-                    />
-
-
-                <cn.bertsir.zbar.view.CornerView
-                    android:id="@+id/right_bottom"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    app:corner_width="5dp"
-                    app:corner_gravity="rightBottom"
-                    android:layout_gravity="right|bottom"
-                    />
-
-
-                <cn.bertsir.zbar.view.ScanLineView
-                    android:id="@+id/scan_line"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </FrameLayout>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/shadow"
-                android:layout_weight="1"
-                android:scaleType="fitXY"
-                />
-
-
-        </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:scaleType="fitXY"
-            android:src="@drawable/shadow"
-            />
+            android:src="@drawable/shadow" />
+
+        <FrameLayout
+            android:id="@+id/scan"
+            android:layout_width="@dimen/scan_frame_width"
+            android:layout_height="@dimen/scan_frame_width"
+            android:layout_gravity="center_horizontal">
+
+            <cn.bertsir.zbar.view.CornerView
+                android:id="@+id/left_top"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:corner_gravity="leftTop"
+                app:corner_width="5dp" />
+
+
+            <cn.bertsir.zbar.view.CornerView
+                android:id="@+id/left_bottom"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="bottom|left"
+                app:corner_gravity="leftBottom"
+                app:corner_width="5dp" />
+
+            <cn.bertsir.zbar.view.CornerView
+                android:id="@+id/right_top"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="right|top"
+                app:corner_gravity="rightTop"
+                app:corner_width="5dp" />
+
+
+            <cn.bertsir.zbar.view.CornerView
+                android:id="@+id/right_bottom"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="right|bottom"
+                app:corner_gravity="rightBottom"
+                app:corner_width="5dp" />
+
+
+            <cn.bertsir.zbar.view.ScanLineView
+                android:id="@+id/scan_line"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:src="@drawable/shadow" />
 
 
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scaleType="fitXY"
+        android:src="@drawable/shadow" />
 
 </LinearLayout>
